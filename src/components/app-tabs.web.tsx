@@ -22,10 +22,10 @@ export default function AppTabs() {
       <TabList asChild>
         <CustomTabList>
           <TabTrigger name="home" href="/" asChild>
-            <TabButton>Home</TabButton>
+            <TabButton>Catálogo</TabButton>
           </TabTrigger>
           <TabTrigger name="explore" href="/explore" asChild>
-            <TabButton>Explore</TabButton>
+            <TabButton>Sincronización</TabButton>
           </TabTrigger>
         </CustomTabList>
       </TabList>
@@ -113,3 +113,4 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.three,
   },
 });
+

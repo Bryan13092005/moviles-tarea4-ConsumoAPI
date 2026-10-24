@@ -1,98 +1,102 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
+import { useCallback, useMemo, useState } from 'react';
+import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
+import { Boton } from '@/components/boton';
+import { EstadoConexion } from '@/components/estado-conexion';
+import { Esqueleto } from '@/components/esqueleto';
+import { PanelNotas } from '@/components/panel-notas';
+import { TarjetaPokemon } from '@/components/tarjeta-pokemon';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { BottomTabInset, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
+import { useNotas } from '@/hooks/useNotas';
+import { usePokemon } from '@/hooks/usePokemon';
+import { Pokemon } from '@/types/index';
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+export default function Catalogo() {
+  const theme = useTheme();
+  const pokemon = usePokemon();
+  const notas = useNotas();
+  const [seleccionado, setSeleccionado] = useState<Pokemon | null>(null);
+
+  const conteo = useMemo(() => {
+    const mapa = new Map<number, number>();
+    notas.data?.forEach((n) => mapa.set(Number(n.itemId), (mapa.get(Number(n.itemId)) ?? 0) + 1));
+    return mapa;
+  }, [notas.data]);
+
+  const abrir = useCallback((p: Pokemon) => setSeleccionado(p), []);
+  const cerrar = useCallback(() => setSeleccionado(null), []);
+  const refrescar = useCallback(() => {
+    pokemon.refetch();
+    notas.refetch();
+  }, [pokemon, notas]);
+
+  const hayDatos = !!pokemon.data;
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
-
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
+    <SafeAreaView style={[styles.flex, { backgroundColor: theme.background }]} edges={['top']}>
+      <View style={styles.cabecera}>
+        <ThemedText type="subtitle" style={styles.titulo}>
+          Catálogo
         </ThemedText>
+        <EstadoConexion />
+        {hayDatos && pokemon.isFetching && (
+          <ThemedText type="small" themeColor="textSecondary" accessibilityLiveRegion="polite">
+            Actualizando…
+          </ThemedText>
+        )}
+        {hayDatos && pokemon.isError && (
+          <ThemedText type="small" themeColor="textSecondary">
+            Mostrando datos guardados
+          </ThemedText>
+        )}
+      </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      {pokemon.isLoading ? (
+        <View style={styles.grilla}>
+          {Array.from({ length: 6 }, (_, i) => (
+            <Esqueleto key={i} alto={170} style={styles.esqueleto} />
+          ))}
+        </View>
+      ) : (
+        <FlatList
+          data={pokemon.data ?? []}
+          keyExtractor={(p) => String(p.id)}
+          numColumns={2}
+          columnWrapperStyle={styles.fila}
+          contentContainerStyle={styles.lista}
+          refreshControl={<RefreshControl refreshing={pokemon.isRefetching} onRefresh={refrescar} />}
+          renderItem={({ item }) => (
+            <TarjetaPokemon pokemon={item} cantidadNotas={conteo.get(item.id) ?? 0} onPress={abrir} />
+          )}
+          ListEmptyComponent={
+            <View style={styles.vacio}>
+              <ThemedText type="smallBold">
+                {pokemon.isError ? 'No se pudo cargar el catálogo' : 'Sin conexión y sin datos guardados'}
+              </ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                Conéctate a internet para descargar el catálogo.
+              </ThemedText>
+              <Boton titulo="Reintentar" onPress={() => pokemon.refetch()} />
+            </View>
+          }
+        />
+      )}
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+      <PanelNotas pokemon={seleccionado} onCerrar={cerrar} />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
+  flex: { flex: 1 },
+  cabecera: { padding: Spacing.three, gap: Spacing.two },
+  titulo: { fontSize: 28, lineHeight: 36 },
+  lista: { paddingHorizontal: Spacing.three, paddingBottom: BottomTabInset + Spacing.four, gap: Spacing.three },
+  fila: { gap: Spacing.three },
+  grilla: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.three, paddingHorizontal: Spacing.three },
+  esqueleto: { width: '47%', borderRadius: 16 },
+  vacio: { alignItems: 'center', gap: Spacing.two, paddingVertical: Spacing.five },
 });
