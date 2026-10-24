@@ -34,7 +34,10 @@ function ItemCambioPendienteBase({ cambio, online, onReintentar, onDescartar }: 
   return (
     <View
       accessibilityLabel={`${ETIQUETA_TIPO[cambio.tipo]} nota ${describir(cambio)}: ${estado}`}
-      style={[styles.item, { backgroundColor: theme.backgroundElement, borderLeftColor: color }]}>
+      style={[
+        styles.item,
+        { backgroundColor: theme.backgroundElement, borderColor: theme.border, borderLeftColor: color },
+      ]}>
       <View style={styles.cabecera}>
         <View style={[styles.tipo, { backgroundColor: conAlfa(color, 0.18) }]}>
           <ThemedText type="small" style={styles.textoTipo}>
@@ -68,7 +71,7 @@ function ItemCambioPendienteBase({ cambio, online, onReintentar, onDescartar }: 
 export const ItemCambioPendiente = memo(ItemCambioPendienteBase);
 
 const styles = StyleSheet.create({
-  item: { padding: 12, borderRadius: 14, borderLeftWidth: 4, gap: 6 },
+  item: { padding: 12, borderRadius: 14, borderWidth: 1, borderLeftWidth: 4, gap: 6 },
   cabecera: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   tipo: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999 },
   textoTipo: { fontSize: 12, lineHeight: 18, fontWeight: '700' },

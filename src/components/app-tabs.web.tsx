@@ -39,7 +39,7 @@ export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps
       <ThemedView
         type={isFocused ? 'backgroundSelected' : 'backgroundElement'}
         style={styles.tabButtonView}>
-        <ThemedText type="small" themeColor={isFocused ? 'text' : 'textSecondary'}>
+        <ThemedText type="small" themeColor={isFocused ? 'primary' : 'textSecondary'}>
           {children}
         </ThemedText>
       </ThemedView>
@@ -55,7 +55,7 @@ export function CustomTabList(props: TabListProps) {
     <View {...props} style={styles.tabListContainer}>
       <ThemedView type="backgroundElement" style={styles.innerContainer}>
         <ThemedText type="smallBold" style={styles.brandText}>
-          Expo Starter
+          Pokédex
         </ThemedText>
 
         {props.children}
@@ -113,4 +113,3 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.three,
   },
 });
-

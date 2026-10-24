@@ -87,7 +87,7 @@ export default function Sincronizacion() {
         ListHeaderComponent={
           <View style={styles.cabecera}>
             <ThemedText type="subtitle" style={styles.titulo}>
-              Sincronización
+              Sincronización y Revisión de Notas
             </ThemedText>
             <EstadoConexion />
 

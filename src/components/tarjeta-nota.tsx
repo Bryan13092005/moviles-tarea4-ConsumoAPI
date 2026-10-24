@@ -23,7 +23,7 @@ function TarjetaNotaBase({ nota, pendiente, soloLectura, onEditar, onEliminar }:
   const tieneImagen = /^https?:\/\//.test(nota.imgUrl ?? '');
 
   return (
-    <View style={[styles.tarjeta, { backgroundColor: theme.backgroundElement }]}>
+    <View style={[styles.tarjeta, { backgroundColor: theme.backgroundElement, borderColor: theme.border }]}>
       <View style={styles.fila}>
         {tieneImagen && <Image source={{ uri: nota.imgUrl }} style={styles.imagen} contentFit="cover" />}
         <View style={styles.texto}>
@@ -56,7 +56,7 @@ function TarjetaNotaBase({ nota, pendiente, soloLectura, onEditar, onEliminar }:
 export const TarjetaNota = memo(TarjetaNotaBase);
 
 const styles = StyleSheet.create({
-  tarjeta: { padding: 12, borderRadius: 16, gap: 8 },
+  tarjeta: { padding: 12, borderRadius: 16, borderWidth: 1, gap: 8 },
   fila: { flexDirection: 'row', gap: 12 },
   imagen: { width: 64, height: 64, borderRadius: 12 },
   texto: { flex: 1, gap: 2 },

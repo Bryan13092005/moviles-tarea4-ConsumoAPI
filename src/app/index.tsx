@@ -39,7 +39,7 @@ export default function Catalogo() {
     <SafeAreaView style={[styles.flex, { backgroundColor: theme.background }]} edges={['top']}>
       <View style={styles.cabecera}>
         <ThemedText type="subtitle" style={styles.titulo}>
-          Catálogo
+          Catálogo Pokemones
         </ThemedText>
         <EstadoConexion />
         {hayDatos && pokemon.isFetching && (

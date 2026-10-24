@@ -29,7 +29,9 @@ export function Boton({ titulo, onPress, variante = 'primario', deshabilitado, p
       style={({ pressed }) => [
         styles.base,
         compacto && styles.compacto,
-        { backgroundColor: relleno, opacity: deshabilitado ? 0.4 : pressed ? 0.8 : 1 },
+        variante === 'primario' && styles.primario,
+        variante === 'secundario' && { borderColor: theme.border },
+        { backgroundColor: relleno, opacity: deshabilitado ? 0.4 : pressed ? 0.85 : 1 },
       ]}>
       <ThemedText type="smallBold" style={{ color: colorTexto }}>
         {titulo}
@@ -40,11 +42,21 @@ export function Boton({ titulo, onPress, variante = 'primario', deshabilitado, p
 
 const styles = StyleSheet.create({
   base: {
-    minHeight: 44,
-    paddingHorizontal: 16,
-    borderRadius: 12,
+    minHeight: 48,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 9999,
+    borderWidth: 1,
+    borderColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  compacto: { paddingHorizontal: 12 },
+  primario: {
+    shadowColor: '#2A75BB',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  compacto: { paddingHorizontal: 16, paddingVertical: 8 },
 });

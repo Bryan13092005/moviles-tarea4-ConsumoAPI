@@ -46,7 +46,10 @@ export function FormularioNota({ titulo, inicial, onGuardar, onCancelar }: Props
     });
   };
 
-  const estiloInput = [styles.input, { backgroundColor: theme.backgroundElement, color: theme.text }];
+  const estiloInput = [
+    styles.input,
+    { backgroundColor: theme.surfaceMuted, color: theme.text, borderColor: theme.border },
+  ];
 
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -110,7 +113,14 @@ const styles = StyleSheet.create({
   contenido: { padding: 16, gap: 12 },
   encabezado: { fontSize: 26, lineHeight: 34 },
   campo: { gap: 4 },
-  input: { minHeight: 44, borderRadius: 12, paddingHorizontal: 12, paddingVertical: 10, fontSize: 16 },
+  input: {
+    minHeight: 44,
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 16,
+  },
   multilinea: { minHeight: 100, textAlignVertical: 'top' },
   acciones: { flexDirection: 'row', justifyContent: 'flex-end', gap: 8, marginTop: 8 },
 });
