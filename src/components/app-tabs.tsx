@@ -23,7 +23,7 @@ export default function AppTabs() {
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="explore">
-        <NativeTabs.Trigger.Label>Sincronización</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Sincronización y PokeNotas</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Badge hidden={pendientes === 0}>{String(pendientes)}</NativeTabs.Trigger.Badge>
         <NativeTabs.Trigger.Icon
           src={require('@/assets/images/tabIcons/explore.png')}

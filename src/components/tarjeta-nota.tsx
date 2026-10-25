@@ -7,7 +7,7 @@ import { InsigniaPendiente } from '@/components/insignia-pendiente';
 import { ThemedText } from '@/components/themed-text';
 import { useTheme } from '@/hooks/use-theme';
 import { NotaUsuario } from '@/types/index';
-
+import { useFonts, Almendra_400Regular } from '@expo-google-fonts/almendra';
 interface Props {
   nota: NotaUsuario;
   pendiente?: boolean;
@@ -18,6 +18,10 @@ interface Props {
 
 function TarjetaNotaBase({ nota, pendiente, soloLectura, onEditar, onEliminar }: Props) {
   const theme = useTheme();
+  const [fontsLoaded] = useFonts({ Almendra_400Regular });
+  if (!fontsLoaded) {
+    return null;
+  }
   const sinSincronizar = nota.id.startsWith('temp-');
   const marcada = pendiente || nota.isPending || sinSincronizar;
   const tieneImagen = /^https?:\/\//.test(nota.imgUrl ?? '');
@@ -27,7 +31,7 @@ function TarjetaNotaBase({ nota, pendiente, soloLectura, onEditar, onEliminar }:
       <View style={styles.fila}>
         {tieneImagen && <Image source={{ uri: nota.imgUrl }} style={styles.imagen} contentFit="cover" />}
         <View style={styles.texto}>
-          <ThemedText type="smallBold" numberOfLines={2}>
+          <ThemedText type="smallBold" numberOfLines={2} style={{ fontFamily: 'Almendra_400Regular', fontWeight: '400' }}>
             {nota.titulo}
           </ThemedText>
           <ThemedText type="small" numberOfLines={3}>

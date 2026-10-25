@@ -13,8 +13,10 @@ import { useTheme } from '@/hooks/use-theme';
 import { useNotas } from '@/hooks/useNotas';
 import { usePokemon } from '@/hooks/usePokemon';
 import { Pokemon } from '@/types/index';
+import { useFonts, Rye_400Regular } from '@expo-google-fonts/rye';
 
 export default function Catalogo() {
+  const [fontsLoaded] = useFonts({ Rye_400Regular });
   const theme = useTheme();
   const pokemon = usePokemon();
   const notas = useNotas();
@@ -34,6 +36,10 @@ export default function Catalogo() {
   }, [pokemon, notas]);
 
   const hayDatos = !!pokemon.data;
+
+    if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <SafeAreaView style={[styles.flex, { backgroundColor: theme.background }]} edges={['top']}>
@@ -93,7 +99,7 @@ export default function Catalogo() {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   cabecera: { padding: Spacing.three, gap: Spacing.two },
-  titulo: { fontSize: 28, lineHeight: 36 },
+  titulo: { fontSize: 28, lineHeight: 36, fontFamily: 'Rye_400Regular', fontWeight: '400' },
   lista: { paddingHorizontal: Spacing.three, paddingBottom: BottomTabInset + Spacing.four, gap: Spacing.three },
   fila: { gap: Spacing.three },
   grilla: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.three, paddingHorizontal: Spacing.three },

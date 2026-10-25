@@ -19,7 +19,7 @@ function TarjetaPokemonBase({ pokemon, cantidadNotas, onPress }: Props) {
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={`${pokemon.nombre}, ${cantidadNotas} notas`}
-      accessibilityHint="Abre las notas de este Pokémon"
+      accessibilityHint="Abre las PokeNotas de este Pokémon"
       onPress={() => onPress(pokemon)}
       style={({ pressed }) => [
         styles.tarjeta,
@@ -36,7 +36,7 @@ function TarjetaPokemonBase({ pokemon, cantidadNotas, onPress }: Props) {
       </ThemedText>
       <View style={[styles.contador, { backgroundColor: conAlfa(Paleta.secundario, cantidadNotas ? 0.5 : 0.25) }]}>
         <ThemedText type="small" style={styles.textoContador}>
-          📝 {cantidadNotas === 1 ? '1 nota' : `${cantidadNotas} notas`}
+          📝 {cantidadNotas === 1 ? '1 PokeNota' : `${cantidadNotas} PokeNotas`}
         </ThemedText>
       </View>
     </Pressable>

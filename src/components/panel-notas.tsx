@@ -15,6 +15,8 @@ import { useIsOnline } from '@/hooks/useIsOnline';
 import { useMensaje } from '@/hooks/useMensaje';
 import { useCrearNota, useNotas, useNotasPorElemento } from '@/hooks/useNotas';
 import { Pokemon } from '@/types/index';
+import { useFonts, Rye_400Regular } from '@expo-google-fonts/rye';
+import { Almendra_400Regular } from '@expo-google-fonts/almendra';
 
 interface Props {
   pokemon: Pokemon | null;
@@ -24,6 +26,10 @@ interface Props {
 // Vista modal con las notas de un Pokémon; solo permite crear y consultar
 export function PanelNotas({ pokemon, onCerrar }: Props) {
   const theme = useTheme();
+  const [fontsLoaded] = useFonts({ Rye_400Regular, Almendra_400Regular });
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <Modal visible={!!pokemon} animationType="slide" presentationStyle="pageSheet" onRequestClose={onCerrar}>
       <SafeAreaView style={[styles.flex, { backgroundColor: theme.background }]} edges={['top', 'bottom']}>
@@ -57,14 +63,14 @@ function ContenidoPanel({ pokemon, onCerrar }: { pokemon: Pokemon; onCerrar: () 
   const guardar = useCallback(
     (valores: ValoresNota) => {
       crear.mutate({ ...valores, imgUrl: pokemon.imagen, itemId: pokemon.id });
-      mostrar(online ? 'Nota guardada' : 'Guardado localmente, se enviará al reconectar');
+      mostrar(online ? 'PokeNota guardada' : 'Guardado localmente, se enviará al reconectar');
       setEditor(false);
     },
     [crear, pokemon, online, mostrar],
   );
 
   if (editor) {
-    return <FormularioNota titulo="Nueva nota" onGuardar={guardar} onCancelar={() => setEditor(false)} />;
+    return <FormularioNota titulo="Nueva PokeNota" onGuardar={guardar} onCancelar={() => setEditor(false)} />;
   }
 
   const cargando = porElemento.isLoading && !todas.data;
@@ -77,7 +83,7 @@ function ContenidoPanel({ pokemon, onCerrar }: { pokemon: Pokemon; onCerrar: () 
             {pokemon.nombre}
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary">
-            Notas del elemento #{pokemon.id}
+            PokeNotas del elemento #{pokemon.id}
           </ThemedText>
         </View>
         <Boton titulo="Cerrar" variante="secundario" onPress={onCerrar} />
@@ -96,9 +102,9 @@ function ContenidoPanel({ pokemon, onCerrar }: { pokemon: Pokemon; onCerrar: () 
         )}
         ListHeaderComponent={
           <View style={styles.encabezadoLista}>
-            <Boton titulo="+ Nueva nota" onPress={() => setEditor(true)} />
+            <Boton titulo="+ Nueva PokeNota" onPress={() => setEditor(true)} />
             <ThemedText type="small" themeColor="textSecondary">
-              Para editar o eliminar notas, ve a la pestaña Sincronización.
+              Para editar o eliminar PokeNotas, ve a la pestaña Sincronización.
             </ThemedText>
           </View>
         }
@@ -111,15 +117,15 @@ function ContenidoPanel({ pokemon, onCerrar }: { pokemon: Pokemon; onCerrar: () 
           ) : porElemento.isError && !porElemento.data ? (
             <View style={styles.vacio}>
               <ThemedText type="small" themeColor="textSecondary">
-                No se pudieron cargar las notas.
+                No se pudieron cargar las PokeNotas.
               </ThemedText>
               <Boton titulo="Reintentar" onPress={() => porElemento.refetch()} />
             </View>
           ) : (
             <View style={styles.vacio}>
-              <ThemedText type="smallBold">Aún no hay notas</ThemedText>
+              <ThemedText type="smallBold">Aún no hay PokeNotas</ThemedText>
               <ThemedText type="small" themeColor="textSecondary">
-                Crea la primera nota de {pokemon.nombre}.
+                Crea la primera PokeNota de {pokemon.nombre}.
               </ThemedText>
             </View>
           )
@@ -136,8 +142,8 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   espacio: { height: 12 },
   cabecera: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 16, paddingBottom: 8 },
-  titulos: { flex: 1 },
-  titulo: { fontSize: 26, lineHeight: 34 },
+  titulos: { flex: 1,},
+  titulo: { fontSize: 26, lineHeight: 34, fontFamily: 'Rye_400Regular', fontWeight: '400'  },
   conexion: { paddingHorizontal: 16 },
   lista: { padding: 16, paddingBottom: 96 },
   encabezadoLista: { marginBottom: 12, gap: 8 },

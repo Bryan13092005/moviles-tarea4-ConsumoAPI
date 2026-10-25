@@ -87,7 +87,7 @@ export default function Sincronizacion() {
         ListHeaderComponent={
           <View style={styles.cabecera}>
             <ThemedText type="subtitle" style={styles.titulo}>
-              Sincronización y Revisión de Notas
+              Sincronización y PokeNotas
             </ThemedText>
             <EstadoConexion />
 
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   lista: { padding: Spacing.three, paddingBottom: BottomTabInset + Spacing.four },
   cabecera: { gap: Spacing.three, marginBottom: Spacing.three },
-  titulo: { fontSize: 28, lineHeight: 36 },
+  titulo: { fontSize: 28, lineHeight: 36, fontFamily: 'Rye_400Regular', fontWeight: '400' },
   resumen: { padding: Spacing.three, borderRadius: 14, borderWidth: 1, gap: Spacing.two },
   sincronizando: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
   seccion: { marginTop: Spacing.two },

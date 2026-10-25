@@ -111,7 +111,7 @@ function Campo({ etiqueta, error, children }: { etiqueta: string; error?: string
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   contenido: { padding: 16, gap: 12 },
-  encabezado: { fontSize: 26, lineHeight: 34 },
+  encabezado: { fontSize: 26, lineHeight: 34, fontFamily: 'Rye_400Regular', fontWeight: '400' },
   campo: { gap: 4 },
   input: {
     minHeight: 44,
